@@ -1,0 +1,40 @@
+<h1>勤怠ログ</h1>
+
+<%= form_tag(attendances_attendances_log_user_path, method: :get) do %>
+  <div class="col-md-2 search-group">
+    <%= date_select :search, 'worked_on', {start_year: @start_year, end_year: @end_year, discard_day: true, prompt: {year: "年", month: "月"}}, class: "form-control"  %>
+  </div>
+  <div class="text-left">
+    <%= submit_tag "　検索　", worked_on: :nil, class: "btn btn-primary search-btn" %>
+  </div>
+<% end %>
+
+<table class="table table-condensed table-bordered table-hover">
+<thead>
+    <tr>
+      <th class="center">日付</th>
+      <th class="center">変更前出社時間</th>
+      <th class="center">変更前退勤時間</th>
+      <th class="center">変更後出社時間</th>
+      <th class="center">変更後退社時間</th>
+      <th class="center">指示者</th>
+      <th class="center">承認日</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @logs.each do |attendance| %>
+    <% if attendance.change_status == "承認" %>
+      <tr>
+        <td class="center"><%= l(attendance.worked_on, format: :long) %></td>
+        <td class="center"><%= l(attendance.started_at, format: :time) if attendance.started_at.present? %></td>
+        <td class="center"><%= l(attendance.finished_at, format: :time) if attendance.finished_at.present? %></td>
+        <td class="center"><%= l(attendance.change_started_at, format: :time) if attendance.change_started_at.present? %></td>
+        <td class="center"><%= l(attendance.change_finished_at, format: :time) if attendance.change_started_at.present? %></td> 
+        <td class="center"><%= attendance.change_superior_name %></td>
+        <td class="center"><%= l(attendance.change_date, format: :sp) if attendance.change_date.present? %></td>
+      </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>

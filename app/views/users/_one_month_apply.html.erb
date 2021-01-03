@@ -1,0 +1,27 @@
+<% @attendances.each do |attendance| %>
+[ 所属長承認 ]<br>
+<div style = "margin-bottom:10px">
+<%= attendance.one_month_superior_name %><%= month_status(attendance.one_month_status) %>
+</div>
+<% break %>
+<% end %>
+
+<% if current_user?(@user) %>
+<%= form_with(model: @user, url: attendances_request_one_month_user_path, local: true, method: :patch) do |f| %>
+  <% @attendances.each do |day|%>
+    <%= f.fields_for "attendances[]", day do |attendance| %>
+      <%= attendance.hidden_field :one_month_approval, value: "2" %>
+      <%= attendance.hidden_field :one_month_status, value: "申請中" %>
+
+        <%= attendance.collection_select :one_month_apply_superior_id, @superiors, :id, :name,
+                                                         {include_blank: true}, {class: "form-control"} %>
+
+        <div style="margin-top: 10px"></div>
+
+        <%= f.submit "申請", class: "btn btn-primary" %>
+  <% end %>
+  <% break %>
+  <% end %>
+  <% end %>
+
+<% end %>

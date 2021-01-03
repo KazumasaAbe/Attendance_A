@@ -1,0 +1,72 @@
+<% provide(:title, 'All Users') %>
+<% provide(:class_text, 'user--edit') %>
+<% provide(:button_text, '編集する') %>
+<h1>ユーザー一覧</h1>
+
+<div class="row">
+<div class="col-md-12">
+<div class="form-a-container">
+<%= form_with url: import_users_path do |f| %>
+  <%= f.file_field :file, accept: '.csv', class: "csv-input" %>
+  <div style="margin-top: 10px"></div>
+  <%= f.submit "CSVインポート", class: "btn btn-primary " %>
+  <div style="margin-bottom: 10px"></div>
+<% end %>
+</div>
+
+<div class="form-b-container">
+<%= form_with url: users_path, local: true, method: :get do |f| %>
+  <%= f.label :search, "ユーザー名検索", class: "label-search" %><br>
+  <%= f.text_field :search, placeholder: "キーワードを入力", class: "form-search-control" %>
+  <%= f.submit "検索", class: "btn btn-primary", data: { disable_with: "検索" } %>
+  <%= link_to "リセット", users_path, class: "btn btn-default" %>
+<% end %>
+</div>
+</div>
+</div>
+
+
+<div class="col-md-12">
+<%= will_paginate %>
+  <table class="table table-condensed table-hover" id="table-users">
+    
+
+    <% @users.each do |user| %>
+
+      <tr>
+        <% if !user.admin? %>
+          <td><%= user.name %>
+      
+          <br>
+            <% if current_user.admin? && !current_user?(user) %>
+              <%= link_to "削除", user, method: :delete,
+                  data: { confirm: "削除してよろしいですか？" },
+                  class: "btn btn-primary user-btn" %>
+            <% end %>
+
+<div class="panel-group" id="sampleAccordion">	
+	<div class="panel panel-default">
+		<div class="panel-heading">
+				<a data-toggle="collapse" data-parent="#sampleAccordion" href="#Collapse<%= user.id %>" >
+          <button type="submit" class="btn btn-primary">
+					編集
+          </button>
+				</a>
+		</div>
+    
+		<div id="Collapse<%= user.id %>" class="panel-collapse collapse">
+			<div class="panel-body">
+				<%= render 'user', { user: user } %>
+			</div>
+		</div>
+	</div>
+</div>
+<% end %>
+
+
+          </td>
+        </tr>
+      <% end %>
+  </table>
+  <%= will_paginate %>
+</div>

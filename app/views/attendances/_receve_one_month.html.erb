@@ -1,0 +1,80 @@
+<%= form_with(model: @user, url: attendances_confirmation_one_month_user_path(@user), local: true, method: :patch) do |f| %>
+  <div class = "modal-dialog modal-lg modal-dialog-center">
+    <div class = "modal-content">
+      <div class ="modal-body">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+
+        <div class ="row">
+          <div class="col-md-12">
+          <% @users.each do |user| %>
+            <% attendances = Attendance.where(user_id: user.id).where(one_month_status: "申請中") %>
+              <% attendances.each do |attendance| %>
+                
+           
+             
+              <h3 class ="center"><%= user.name %>からの1ヶ月分勤怠申請</h3>
+                <table class= "table table-condensed table-bordered" tabel-hover id="one_month_table">
+                  <thead>
+                    <tr>
+                      <th class="center">月</th>
+                      <th class="center">指示者確認<%= "\u329e" %></th>
+                      <th class="center">変更</th>
+                      <th class="center">勤怠を確認する</th>
+                    </tr>
+                  </thead>
+                   <% break %>
+               
+              <% end %>
+
+
+
+                  <tbody>
+                  <% attendances = Attendance.where(user_id: user.id).where(one_month_status: "申請中") %>
+                  <% attendances.each do |attendance| %>
+                  <%= f.fields_for "attendances[]", attendance do |at| %>
+                  <% if attendance.one_month_apply_superior_id == current_user.id && attendance.one_month_approval == 2 %>
+                      
+                          <tr>
+                            <td class="center"><%= l(attendance.worked_on, format: :month) %></td>
+                             <td class="center">
+                          <%= at.select :one_month_status, ['なし','申請中', '承認', '否認'], {}, class: "form-control" %>
+                        </td>
+                        <td class="center">
+                          <%= at.check_box :one_month_check %>
+                          <%= at.hidden_field :one_month_approval, value: 3 %>
+                        </td>
+                            <td class="center">
+                              <%= link_to "確認", user_path(user, date: attendance.worked_on), class: "btn btn-primary btn-overtime_check" %>
+                            </td>
+                          </tr>
+
+                          
+                       
+                     
+                    
+                    <% end %>
+                  </tbody>
+
+                <% end %>
+                <% end %>
+                
+                </table>
+               
+            <% end %>
+           <div class="text-center">
+           <%= f.submit "変更を送信する", class: "btn btn-primary btn-lg btn-overtime-change" %>
+           </div>
+            
+
+          </div>
+
+        </div>
+      </div>
+       
+    </div>
+    
+  </div>
+
+<% end %>

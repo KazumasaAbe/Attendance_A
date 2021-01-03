@@ -1,0 +1,40 @@
+<header class="navbar navbar-fixed-top navbar-inverse">
+  <div class="container">
+    <%= link_to "勤怠システム", root_path, id: "logo" %>
+    <nav>
+      <ul class="nav navbar-nav navbar-right">
+
+
+        <li><%= link_to "トップ", root_path %></li>
+        <% if logged_in? %>
+
+        <% if current_user.admin? %>
+          <li><%= link_to "ユーザー一覧", users_path %></li>
+          <li><%= link_to "出勤社員一覧", employees_path %></li>
+          <li><%= link_to "拠点情報の修正", bases_path(current_user) %></li>
+          <li><%= link_to "基本情報の修正", edit_user_path(current_user) %></li>
+          <% end %>
+
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            アカウント<b class="caret"></b>
+            </a>     
+            <ul class="dropdown-menu">
+            <% if !current_user.admin? %>
+              <li><%= link_to "勤怠", user_path(current_user) %></li>
+            <% end %>
+              
+              <li class="divider"></li>
+              <li>
+                <%= link_to "ログアウト", logout_path, method: :delete %>
+              </li>
+            </ul>
+          </li>
+
+        <% else %>
+          <li><%= link_to "ログイン", login_path %></li>
+      <% end %>
+      </ul>
+    </nav>
+  </div>
+</header>

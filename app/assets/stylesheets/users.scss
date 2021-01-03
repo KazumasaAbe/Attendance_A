@@ -1,0 +1,79 @@
+.employees-table{
+  vertical-align:  middle;
+  text-align: center;
+}
+
+#user-table {
+  vertical-align:  middle;
+  text-align: center;
+  thead td {
+  vertical-align: bottom;
+  border-bottom: 3px double #ccc;
+  }
+}
+
+#table-attendances {
+  th {
+    vertical-align: middle;
+    text-align: center;
+    vertical-align: bottom;
+    border-bottom: 3px double #ccc;
+     }
+  td {
+    vertical-align: middle;
+    text-align: center;
+     }
+}
+
+
+.label-signup {
+  margin-top: 5px;
+}
+
+.btn-signup {
+  margin-top: 10px;
+}
+
+.label-user--edit {
+  margin-top: 5px;
+}
+
+.btn-user--edit {
+  margin-top: 10px;
+}
+
+#table-users {
+  td {
+    vertical-align: middle;
+  }
+}
+
+.user-btn {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.csv-input {
+  display: none;
+}
+
+.notice-superior {
+  border: solid 2px #ff0000;
+  color: #ff0000;
+  font-weight: bold;
+}
+
+.notice-superior:hover {
+  border: solid 2px #f96250;
+  color: #f96250;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.form-a-container {
+float: left;
+}
+
+.form-b-container {
+  float: right;
+  }

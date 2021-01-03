@@ -1,0 +1,59 @@
+<%= form_with(model: @user, url: attendances_over_time_update_info_user_path(date: @worked_on), local: true, method: :patch) do |fo| %>
+  <div class="modal-dialog modal-lg modal-dialog-center">
+    <div class="modal-content">
+      <div class="modal-body">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <div class="row">
+          <div class="col-md-12">
+            <h3 class="center">【残業申請】</h3>
+            <table class="table table-condensed table-bordered table-hover">
+              <thead>
+                <tr>
+                  <th class="center">日付</th>
+                  <th class="center">曜日</th>
+                  <th class="center">終了予定時間</th>
+                  <th class="center">翌日</th>
+                  <th class="center">業務処理内容</th>
+                  <th class="center">指示者確認<%= "\u329e" %></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @attendances.each do |day|%>
+                  <%= fo.fields_for "attendances[]", day do |attendance| %>
+                    <tr>
+                      <td class="center"><%= l(day.worked_on, format: :short) %></td>
+                      <td class="center">
+                        <% if day.worked_on.wday == 0 %>
+                          <font color="#ff000">
+                        <% elsif day.worked_on.wday == 6 %>
+                          <font color="#0033cc">
+                        <% end %>
+                        <%= $days_of_the_week[day.worked_on.wday] %>
+                      </td>
+                      <td class="center"><%= attendance.time_field :overtime_end_plan, class: "form-control" %></td>
+                      <td class="center"><%= attendance.check_box :next_day_check %></td>
+                      <td class="center"><%= attendance.text_field :overtime_detail, placeholder: "入力必須", class: "form-control" %></td>
+                      <td>
+                        <%= attendance.collection_select :overtime_superior_id, @superiors, :id, :name,
+                                                         {include_blank: true}, {class: "form-control"} %>
+                        <%= attendance.hidden_field :overtime_status, value: "申請中" %>
+                        <%= attendance.hidden_field :overtime_approval, value: 2 %>
+                        <%= attendance.hidden_field :overtime_check, value: "0" %>
+                      </td>
+                    </tr>
+                  <% end %>
+                  <% break %>
+                <% end %>
+              </tbody>
+            </table>
+            <div class="center">
+              <%= fo.submit "変更を送信する", class: "btn btn-lg btn-primary" %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
